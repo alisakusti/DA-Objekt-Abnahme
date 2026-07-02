@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abnahmeprotokoll · D&A Holding GmbH</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;color:#1a1a1a;background:#f5f5f3;min-height:100vh}
+.page{max-width:760px;margin:0 auto;padding:20px 16px 60px}
+
+/* HEADER */
+.header-card{background:linear-gradient(135deg,#1a1a1a 0%,#2a2a2a 60%,#1e1e1e 100%);border:none;border-radius:14px;padding:0;margin-bottom:14px;overflow:hidden;position:relative}
+.header-card::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:rgba(196,158,76,0.06);border-radius:50%;pointer-events:none}
+.header-card::after{content:'';position:absolute;bottom:-60px;left:20px;width:220px;height:220px;background:rgba(196,158,76,0.04);border-radius:50%;pointer-events:none}
+.header-brand{display:flex;align-items:center;gap:16px;padding:22px 24px 18px}
+.header-title{font-size:22px;font-weight:700;color:#fff;line-height:1.1;letter-spacing:0.5px}
+.header-title span{display:block;font-size:11px;font-weight:400;color:#C49E4C;letter-spacing:2px;text-transform:uppercase;margin-top:3px}
+.header-fields{padding:0 24px 22px;position:relative;z-index:1}
+.header-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.doc-label{font-size:13px;color:rgba(255,255,255,0.5);letter-spacing:0.3px}
+.date-chip{font-size:12px;color:#C49E4C;background:rgba(196,158,76,0.12);border:0.5px solid rgba(196,158,76,0.3);border-radius:6px;padding:4px 10px;white-space:nowrap}
+.header-card .field-group label{color:rgba(255,255,255,0.45)}
+.header-card .field-group input,.header-card .field-group select{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);color:#fff;border-radius:8px}
+.header-card .field-group input:focus,.header-card .field-group select:focus{border-color:#C49E4C;outline:none;background:rgba(255,255,255,0.1)}
+.header-card .field-group select option{background:#2a2a2a;color:#fff}
+.header-card .field-group input::placeholder{color:rgba(255,255,255,0.3)}
+.fields-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media(max-width:600px){.fields-row{grid-template-columns:1fr}}
+.field-group label{font-size:11px;color:#888;font-weight:500;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.4px}
+.field-group input,.field-group select{width:100%;padding:9px 12px;border:1px solid #e0e0dc;border-radius:8px;font-size:14px;background:#fff;color:#1a1a1a;font-family:inherit;transition:border-color 0.15s}
+.field-group input:focus,.field-group select:focus{outline:none;border-color:#FFD700}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+@media(max-width:500px){.stats-row{grid-template-columns:repeat(2,1fr)}}
+.stat{background:#fff;border:0.5px solid #e0e0dc;border-radius:10px;padding:12px;text-align:center}
+.stat-val{font-size:22px;font-weight:600;color:#1a1a1a}
+.stat-val.ok{color:#2d7a2d}
+.stat-val.no{color:#b33030}
+.stat-lbl{font-size:11px;color:#888;margin-top:2px}
+
+/* CHECKLIST SECTIONS */
+.section{background:#fff;border:0.5px solid #e0e0dc;border-radius:12px;margin-bottom:10px;overflow:hidden}
+.sec-head{background:#1a1a1a;color:#C49E4C;padding:11px 16px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:10px;letter-spacing:0.3px;border-bottom:1px solid rgba(196,158,76,0.2)}
+.sec-num{width:22px;height:22px;border:1px solid rgba(196,158,76,0.5);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#C49E4C;flex-shrink:0;letter-spacing:0}
+.item-row{display:flex;align-items:flex-start;border-bottom:0.5px solid #f0f0ec}
+.item-row:last-child{border-bottom:none}
+.item-main{flex:1;padding:10px 14px;line-height:1.5}
+.item-uk{font-size:13px;color:#1a1a1a;font-weight:500}
+.item-de{font-size:11px;color:#aaa;margin-top:1px}
+.btn-group{display:flex;align-items:center;padding:8px 10px;gap:6px;flex-shrink:0}
+.btn-ok{background:#edf7ed;color:#2d7a2d;border:1px solid #a3d4a3;border-radius:6px;font-size:12px;font-weight:600;padding:5px 11px;cursor:pointer;transition:all 0.12s}
+.btn-ok:hover{background:#d4edda}
+.btn-ok.active{background:#2d7a2d;color:#fff;border-color:#2d7a2d}
+.btn-no{background:#fdf0f0;color:#b33030;border:1px solid #e8a8a8;border-radius:6px;font-size:12px;font-weight:600;padding:5px 11px;cursor:pointer;transition:all 0.12s}
+.btn-no:hover{background:#fad9d9}
+.btn-no.active{background:#b33030;color:#fff;border-color:#b33030}
+.note-row{padding:4px 14px 12px;background:#fafaf8}
+.note-row textarea{width:100%;font-size:12px;border:1px solid #e0e0dc;border-radius:7px;padding:7px 10px;resize:none;background:#fff;color:#1a1a1a;font-family:inherit;line-height:1.5}
+.note-row textarea:focus{outline:none;border-color:#FFD700}
+
+/* PROGRESS */
+.prog-wrap{margin-bottom:14px}
+.prog-bar{height:5px;background:#e8e8e4;border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:#FFD700;border-radius:3px;transition:width 0.35s}
+.prog-label{display:flex;justify-content:space-between;font-size:11px;color:#aaa;margin-top:4px}
+
+/* BOTTOM CARDS */
+.card{background:#fff;border:0.5px solid #e0e0dc;border-radius:12px;padding:20px 22px;margin-bottom:12px}
+.card-title{font-size:14px;font-weight:600;color:#1a1a1a;margin-bottom:12px;display:flex;align-items:center;gap:7px}
+.card-title .ct-icon{font-size:17px}
+textarea.comment-box{width:100%;font-size:13px;border:1px solid #e0e0dc;border-radius:8px;padding:10px 12px;resize:vertical;min-height:90px;background:#fafaf8;color:#1a1a1a;font-family:inherit;line-height:1.6}
+textarea.comment-box:focus{outline:none;border-color:#FFD700}
+
+/* VIDEO */
+.video-name-box{background:#fffbea;border:1px solid #FFD700;border-radius:8px;padding:12px 14px;margin-bottom:14px}
+.video-name-label{font-size:11px;color:#a07800;font-weight:600;text-transform:uppercase;letter-spacing:0.4px;margin-bottom:4px}
+.video-name-val{font-size:13px;color:#1a1a1a;font-weight:500;word-break:break-all;font-family:monospace}
+.video-hint{font-size:12px;color:#888;margin-top:6px;line-height:1.5}
+.video-link-row{margin-top:12px}
+.video-link-row label{font-size:11px;color:#888;font-weight:500;display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.4px}
+.video-link-row input{width:100%;padding:9px 12px;border:1px solid #e0e0dc;border-radius:8px;font-size:13px;background:#fff;color:#1a1a1a;font-family:inherit}
+.video-link-row input:focus{outline:none;border-color:#FFD700}
+
+/* SIGNATURE */
+.declaration{font-size:12px;color:#666;line-height:1.7;background:#fafaf8;border-radius:8px;padding:12px 14px;border-left:3px solid #C49E4C;margin-bottom:14px}
+.declaration strong{color:#1a1a1a}
+.sig-wrap{border:2px solid #e0e0dc;border-radius:10px;background:#fff;position:relative;height:130px;cursor:crosshair;overflow:hidden;touch-action:none}
+.sig-wrap:active{border-color:#C49E4C}
+canvas#sigCanvas{position:absolute;top:0;left:0;width:100%;height:100%}
+.sig-hint{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:13px;color:#ccc;pointer-events:none;text-align:center;line-height:1.8}
+.sig-hint .sig-hint-icon{font-size:28px;display:block;margin-bottom:4px}
+.sig-actions{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+.sig-clear{font-size:13px;color:#aaa;cursor:pointer;text-decoration:underline;background:none;border:none;font-family:inherit;padding:6px 0}
+.sig-date{font-size:11px;color:#aaa}
+
+/* SUBMIT */
+.submit-btn{width:100%;padding:18px;background:#C49E4C;color:#fff;font-size:16px;font-weight:600;border:none;border-radius:12px;cursor:pointer;font-family:inherit;letter-spacing:0.2px;transition:background 0.15s;margin-top:8px;min-height:56px}
+.submit-btn:hover{background:#b08c3e}
+.submit-btn:active{transform:scale(0.98);background:#9a7835}
+
+@media(max-width:600px){
+  .sig-wrap{height:160px}
+  .sig-hint{font-size:14px}
+  .submit-btn{padding:20px;font-size:17px;border-radius:14px;min-height:64px}
+  .btn-ok,.btn-no{padding:7px 13px;font-size:13px}
+  .item-uk{font-size:14px}
+  .card{padding:16px}
+}
+
+/* PRINT PAGE */
+#printPage{display:none}
+@media print{
+  body{background:#fff}
+  .page{display:none}
+  #printPage{display:block;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:12px;color:#000;padding:20px;max-width:100%}
+  .pr-header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #C49E4C;padding-bottom:10px;margin-bottom:16px;background:#1a1a1a;color:#fff;padding:14px 16px;border-radius:6px 6px 0 0;margin:-20px -20px 16px}
+  .pr-logo{font-size:16px;font-weight:700;color:#fff;letter-spacing:0.5px}
+  .pr-sub{font-size:10px;color:#C49E4C;letter-spacing:2px;text-transform:uppercase;margin-top:2px}
+  .pr-meta{font-size:11px;color:#666;text-align:right}
+  .pr-info{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px;background:#f9f9f9;padding:10px;border-radius:6px}
+  .pr-info-item label{font-size:9px;color:#999;text-transform:uppercase;letter-spacing:0.4px;display:block;margin-bottom:2px}
+  .pr-info-item span{font-size:12px;font-weight:600}
+  .pr-stats{display:flex;gap:16px;margin-bottom:16px;padding:8px 10px;background:#f9f9f9;border-radius:6px}
+  .pr-stat{text-align:center}
+  .pr-stat-val{font-size:16px;font-weight:700}
+  .pr-stat-lbl{font-size:9px;color:#999}
+  .pr-section{margin-bottom:14px;break-inside:avoid}
+  .pr-sec-head{background:#1a1a1a;color:#FFD700;padding:6px 10px;font-size:11px;font-weight:700;border-radius:4px 4px 0 0}
+  .pr-item{display:flex;align-items:flex-start;padding:5px 8px;border-bottom:0.5px solid #eee;font-size:11px}
+  .pr-item:last-child{border-bottom:none}
+  .pr-item-text{flex:1}
+  .pr-item-uk{font-weight:500}
+  .pr-item-de{font-size:10px;color:#999}
+  .pr-status{font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;white-space:nowrap;margin-left:8px}
+  .pr-status.ok{background:#edf7ed;color:#2d7a2d}
+  .pr-status.no{background:#fdf0f0;color:#b33030}
+  .pr-status.empty{background:#f5f5f5;color:#aaa}
+  .pr-note{font-size:10px;color:#b33030;padding:3px 8px 5px 8px;background:#fff8f8;border-left:2px solid #b33030;margin:0 8px 5px}
+  .pr-comment{background:#fffbea;border:1px solid #FFD700;border-radius:4px;padding:8px 10px;margin-bottom:14px;font-size:11px}
+  .pr-video{background:#f9f9f9;border-radius:4px;padding:8px 10px;margin-bottom:14px;font-size:11px}
+  .pr-declaration{font-size:10px;color:#666;line-height:1.6;border-left:3px solid #FFD700;padding:8px 10px;margin-bottom:14px;background:#fafafa}
+  .pr-sig-area{margin-top:8px}
+  .pr-sig-area img{border:1px solid #eee;border-radius:4px;max-height:70px}
+  .pr-sig-name{font-size:11px;font-weight:600;margin-top:4px}
+  .pr-sig-date{font-size:10px;color:#999}
+}
+</style>
+<script src="config.js"></script>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header-card">
+    <div class="header-brand">
+      <!-- D&A Holding SVG Logo -->
+      <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="52" height="52" rx="10" fill="rgba(196,158,76,0.12)"/>
+        <!-- Building left tall -->
+        <rect x="10" y="14" width="7" height="28" rx="1" fill="none" stroke="#C49E4C" stroke-width="1.5"/>
+        <!-- Building middle -->
+        <rect x="20" y="20" width="7" height="22" rx="1" fill="none" stroke="#C49E4C" stroke-width="1.5"/>
+        <!-- Building right short -->
+        <rect x="30" y="24" width="7" height="18" rx="1" fill="none" stroke="#C49E4C" stroke-width="1.5"/>
+        <!-- Roof peaks -->
+        <polyline points="10,14 13.5,8 17,14" fill="none" stroke="#C49E4C" stroke-width="1.5" stroke-linejoin="round"/>
+        <polyline points="20,20 23.5,15 27,20" fill="none" stroke="#C49E4C" stroke-width="1.5" stroke-linejoin="round"/>
+        <!-- Windows -->
+        <rect x="12" y="18" width="3" height="3" rx="0.5" fill="#C49E4C" opacity="0.7"/>
+        <rect x="12" y="24" width="3" height="3" rx="0.5" fill="#C49E4C" opacity="0.7"/>
+        <rect x="22" y="23" width="3" height="3" rx="0.5" fill="#C49E4C" opacity="0.7"/>
+        <rect x="32" y="27" width="3" height="3" rx="0.5" fill="#C49E4C" opacity="0.4"/>
+        <!-- Ground line -->
+        <line x1="8" y1="42" x2="40" y2="42" stroke="#C49E4C" stroke-width="1" opacity="0.4"/>
+      </svg>
+      <div>
+        <div class="header-title">D&amp;A HOLDING<span>ALLES AUS EINER HAND</span></div>
+      </div>
+    </div>
+    <div class="header-fields">
+      <div class="header-meta">
+        <span class="doc-label">Акт приймання · Abnahmeprotokoll</span>
+        <span class="date-chip" id="dateChip"></span>
+      </div>
+      <div class="fields-row">
+      <div class="field-group">
+        <label>Співробітник / Mitarbeiter</label>
+        <select id="workerName" onchange="onWorkerChange()">
+          <option value="">— обрати —</option>
+        </select>
+        <input type="text" id="workerNameCustom" placeholder="Введіть ім'я..." oninput="onFieldChange()" style="display:none;margin-top:6px">
+      </div>
+      <div class="field-group">
+        <label>Об'єкт / Baustelle</label>
+        <select id="baustelle" onchange="onBaustelleChange()">
+          <option value="">— обрати —</option>
+        </select>
+        <input type="text" id="baustelleCustom" placeholder="Введіть адресу..." oninput="onFieldChange()" style="display:none;margin-top:6px">
+      </div>
+      <div class="field-group">
+        <label>Квартира / Wohnungsnr.</label>
+        <input type="text" id="wohnungNr" placeholder="напр. 12, EG links..." oninput="onFieldChange()">
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="prog-wrap">
+    <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+    <div class="prog-label"><span id="progText">0 / 0 перевірено</span><span id="progPct">0%</span></div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat"><div class="stat-val" id="stTotal">0</div><div class="stat-lbl">всього</div></div>
+    <div class="stat"><div class="stat-val ok" id="stOk">0</div><div class="stat-lbl">✓ OK</div></div>
+    <div class="stat"><div class="stat-val no" id="stNo">0</div><div class="stat-lbl">✗ зауважень</div></div>
+    <div class="stat"><div class="stat-val" id="stPend">0</div><div class="stat-lbl">не перевірено</div></div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div id="cl"></div>
+
+  <!-- GENERAL COMMENTS -->
+  <div class="card">
+    <div class="card-title"><span class="ct-icon">💬</span> Загальні коментарі / Allgemeine Bemerkungen</div>
+    <textarea class="comment-box" id="generalComment" placeholder="Додаткові зауваження після огляду... / Zusätzliche Bemerkungen nach der Besichtigung..."></textarea>
+  </div>
+
+  <!-- PHOTO + VIDEO INSTRUCTION -->
+  <div class="card" style="border-left:3px solid #C49E4C">
+    <div class="card-title"><span class="ct-icon">📸</span> Фото та відео / Fotos & Video <span style="color:#b33030;font-size:12px;font-weight:400;margin-left:6px">* обов'язково</span></div>
+    <div style="font-size:13px;color:#1a1a1a;line-height:1.9;margin-bottom:14px">
+      <strong>Зніміть на телефон:</strong><br>
+      📷 &nbsp;Фото кожного приміщення (до та після)<br>
+      🎥 &nbsp;Відео — обхід всієї квартири<br>
+      <br>
+      <strong>Відправте у чат приймання підряд:</strong><br>
+      <span style="color:#555">1. PDF-звіт &nbsp;→&nbsp; 2. Фото &nbsp;→&nbsp; 3. Відео</span>
+    </div>
+    <div style="font-size:11px;color:#aaa;margin-bottom:16px;line-height:1.6;border-top:0.5px solid #eee;padding-top:10px">
+      Fotos und Video sind <strong>Pflicht</strong> — Protokolle ohne Medien werden nicht akzeptiert.<br>
+      Senden Sie in den Abnahme-Chat: 1. PDF &nbsp;→&nbsp; 2. Fotos &nbsp;→&nbsp; 3. Video
+    </div>
+    <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;padding:12px;background:#fafaf8;border-radius:8px;border:1px solid #e0e0dc" id="mediaConfirmLabel">
+      <input type="checkbox" id="mediaConfirm" onchange="onMediaConfirm()" style="margin-top:2px;width:16px;height:16px;accent-color:#2d7a2d;flex-shrink:0">
+      <span style="font-size:13px;color:#1a1a1a;line-height:1.5">
+        Я підтверджую, що фото та відео зроблені і будуть відправлені в чат приймання.<br>
+        <span style="font-size:11px;color:#aaa">Ich bestätige, dass Fotos und Video aufgenommen wurden und in den Abnahme-Chat gesendet werden.</span>
+      </span>
+    </label>
+  </div>
+
+  <!-- SIGNATURE -->
+  <div class="card">
+    <div class="declaration">
+      <strong>Підтвердження:</strong> Я, нижчепідписаний, підтверджую, що особисто оглянув(ла) об'єкт та засвідчую, що зазначені дані відповідають дійсності.<br>
+      <span style="color:#aaa">Ich bestätige, dass ich das Objekt persönlich besichtigt habe und dass alle angegebenen Daten der Wahrheit entsprechen.</span>
+    </div>
+    <div class="card-title" style="margin-bottom:8px"><span class="ct-icon">✍️</span> Підпис / Unterschrift</div>
+    <div class="sig-wrap" id="sigWrap">
+      <canvas id="sigCanvas"></canvas>
+      <div class="sig-hint" id="sigHint"><span class="sig-hint-icon">✍️</span>Підпишіть тут пальцем<br><span style="font-size:11px">Hier mit Finger unterschreiben</span></div>
+    </div>
+    <div class="sig-actions">
+      <button class="sig-clear" onclick="clearSig()">Очистити / Löschen</button>
+      <span class="sig-date" id="sigDateLabel"></span>
+    </div>
+    <button class="submit-btn" onclick="handleSubmit()">📄 Зберегти та роздрукувати звіт / Bericht speichern & drucken</button>
+  </div>
+
+</div><!-- end .page -->
+
+<!-- PRINT PAGE -->
+<div id="printPage"></div>
+
+<script>
+const SECTIONS = [
+  {num:"01",title:"Загальне / Allgemein",items:[
+    {uk:"Вхідні двері — функція, ущільнювач, замок",de:"Eingangstür — Funktion, Dichtung, Schloss"},
+    {uk:"Вікна — відкривання, ущільнювач, ручки",de:"Fenster — Öffnung, Dichtung, Griffe"},
+    {uk:"Стіни — рівність, відсутність тріщин",de:"Wände — Ebenheit, keine Risse"},
+    {uk:"Стелі — без тріщин, рівна штукатурка",de:"Decken — keine Risse, sauber verputzt"},
+    {uk:"Підлоги — загальний вигляд і стан",de:"Böden — allgemeiner Zustand"},
+  ]},
+  {num:"02",title:"Стіни та стелі / Wände & Decken",items:[
+    {uk:"Штукатурка суцільна, без порожнин",de:"Putz vollflächig, keine Hohlstellen"},
+    {uk:"Примикання до вікон і дверей акуратні",de:"Anschlüsse an Fenster/Türen sauber"},
+    {uk:"Кути та кромки рівні",de:"Ecken und Kanten gerade"},
+    {uk:"Фарбування рівномірне, без плям",de:"Farbe gleichmäßig, keine Flecken"},
+    {uk:"Плінтуси щільно прилягають",de:"Sockelleisten fest und dicht"},
+  ]},
+  {num:"03",title:"Підлоги / Böden",items:[
+    {uk:"Плитка / покриття — без тріщин та сколів",de:"Fliesen/Belag — keine Risse oder Absplitterungen"},
+    {uk:"Шви рівномірні, повністю заповнені",de:"Fugen gleichmäßig, vollständig verfugt"},
+    {uk:"Переходи та пороги змонтовані правильно",de:"Übergänge und Schwellen korrekt montiert"},
+    {uk:"Покриття міцно приклеєне, без порожнин",de:"Belag fest verklebt, keine Hohlstellen"},
+    {uk:"Плінтуси встановлені без зазорів",de:"Sockelleisten lückenlos gesetzt"},
+  ]},
+  {num:"04",title:"Електрика / Elektro",items:[
+    {uk:"Розподільний щит підписаний, всі автомати на місці",de:"Sicherungskasten beschriftet, alle Sicherungen vorhanden"},
+    {uk:"Всі розетки працюють",de:"Alle Steckdosen funktionsfähig"},
+    {uk:"Всі вимикачі працюють",de:"Alle Lichtschalter funktionsfähig"},
+    {uk:"Світильники змонтовані та працюють",de:"Leuchten montiert und in Betrieb"},
+    {uk:"Домофон / дзвінок працює",de:"Gegensprechanlage / Klingel funktionsfähig"},
+    {uk:"Інтернет / ТВ-розетки встановлені",de:"Internet-/TV-Anschlüsse vorhanden"},
+  ]},
+  {num:"05",title:"Сантехніка та опалення / Sanitär & Heizung",items:[
+    {uk:"Трубопроводи — видимих витоків немає",de:"Rohrleitungen — keine sichtbaren Leckagen"},
+    {uk:"Радіатори — всі змонтовані та гріють",de:"Heizkörper — alle montiert und warm"},
+    {uk:"Термостатні клапани працюють",de:"Thermostatventile funktionsfähig"},
+    {uk:"Гаряча вода є",de:"Warmwasser verfügbar"},
+    {uk:"Холодна вода є",de:"Kaltwasser funktionsfähig"},
+  ]},
+  {num:"06",title:"Ванна / туалет / Bad & WC",items:[
+    {uk:"Настінна плитка — без тріщин, шви рівномірні",de:"Wandfliesen — keine Risse, gleichmäßige Fugen"},
+    {uk:"Підлогова плитка — без порожнин",de:"Bodenfliesen — keine Hohlstellen"},
+    {uk:"Ванна / піддон — силікон нанесено повністю",de:"Wanne / Duschwanne — Silikonfugen vollständig"},
+    {uk:"Душова кабіна / двері не протікає",de:"Duschkabine / Tür dicht"},
+    {uk:"Унітаз змонтований міцно, не хитається",de:"WC fest montiert, kein Wackeln"},
+    {uk:"Раковина та змішувач — без витоку",de:"Waschbecken und Armatur dicht"},
+    {uk:"Дзеркало / аксесуари змонтовані",de:"Spiegel / Zubehör montiert"},
+    {uk:"Вентиляція працює",de:"Lüftung funktionsfähig"},
+  ]},
+  {num:"07",title:"Кухня / Küche",items:[
+    {uk:"Підлогове покриття без дефектів",de:"Bodenfliesen / Belag ohne Mängel"},
+    {uk:"Настінна плитка / фартух змонтовані правильно",de:"Wandfliesen / Spritzschutz korrekt"},
+    {uk:"Мийка та змішувач — без витоку",de:"Spüle und Armatur dicht"},
+    {uk:"Підключення для посудомийної машини є",de:"Anschluss für Spülmaschine vorhanden"},
+    {uk:"Підключення для плити / варильної панелі коректне",de:"Herd-/Kochfeldanschluss korrekt"},
+    {uk:"Витяжка працює",de:"Dunstabzug funktionsfähig"},
+  ]},
+  {num:"08",title:"Двері та вікна / Türen & Fenster",items:[
+    {uk:"Міжкімнатні двері — функція, ручки, замки",de:"Innentüren — Funktion, Griffe, Schlösser"},
+    {uk:"Дверні полотна без пошкоджень",de:"Türblätter ohne Beschädigungen"},
+    {uk:"Дверні коробки змонтовані акуратно",de:"Zargen sauber montiert, keine Spalten"},
+    {uk:"Підвіконня встановлені всередині",de:"Fensterbänke innen montiert"},
+  ]},
+];
+
+const state = {};
+let total = 0;
+SECTIONS.forEach(s => total += s.items.length);
+document.getElementById('stTotal').textContent = total;
+
+// Date
+const now = new Date();
+const dateStr = now.toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'});
+document.getElementById('dateChip').textContent = dateStr;
+document.getElementById('sigDateLabel').textContent = dateStr;
+
+// Populate selects from config.js
+function populateSelects() {
+  const wSel = document.getElementById('workerName');
+  CONFIG.workers.forEach(name => {
+    const opt = document.createElement('option');
+    opt.value = name;
+    opt.textContent = name;
+    wSel.appendChild(opt);
+  });
+  const other1 = document.createElement('option');
+  other1.value = '__other__';
+  other1.textContent = '+ Додати ім\'я / Name hinzufügen';
+  wSel.appendChild(other1);
+
+  const sSel = document.getElementById('baustelle');
+  CONFIG.sites.forEach(site => {
+    const opt = document.createElement('option');
+    opt.value = site;
+    opt.textContent = site;
+    sSel.appendChild(opt);
+  });
+  const other2 = document.createElement('option');
+  other2.value = '__other__';
+  other2.textContent = '+ Додати адресу / Adresse hinzufügen';
+  sSel.appendChild(other2);
+}
+
+// Worker select handler
+function onWorkerChange() {
+  const sel = document.getElementById('workerName');
+  const custom = document.getElementById('workerNameCustom');
+  if(sel.value === '__other__') {
+    custom.style.display = 'block';
+    custom.focus();
+  } else {
+    custom.style.display = 'none';
+  }
+  onFieldChange();
+}
+
+// Baustelle select handler
+function onBaustelleChange() {
+  const sel = document.getElementById('baustelle');
+  const custom = document.getElementById('baustelleCustom');
+  if(sel.value === '__other__') {
+    custom.style.display = 'block';
+    custom.focus();
+  } else {
+    custom.style.display = 'none';
+  }
+  onFieldChange();
+}
+
+function getWorkerName() {
+  const sel = document.getElementById('workerName');
+  if(sel.value === '__other__') return document.getElementById('workerNameCustom').value.trim();
+  return sel.value;
+}
+
+function getBaustelle() {
+  const sel = document.getElementById('baustelle');
+  if(sel.value === '__other__') return document.getElementById('baustelleCustom').value.trim();
+  return sel.value;
+}
+function buildVideoName() {
+  const name = getWorkerName().split(' ').pop() || 'Name'; // фамилия
+  const siteRaw = getBaustelle();
+  // Сократить адрес: "Voltastraße 92" → "Volta92"
+  const siteShort = siteRaw.replace(/straße|strasse|str\./gi,'str').replace(/\s+/g,'').replace(/[äÄ]/g,'a').replace(/[öÖ]/g,'o').replace(/[üÜ]/g,'u') || 'Obj';
+  const apt = document.getElementById('wohnungNr').value.trim().replace(/\s+/g,'') || 'W0';
+  const d = now.toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'2-digit'}).replace(/\./g,'');
+  return `${siteShort}_W${apt}_${name}_${d}.mp4`;
+}
+function onFieldChange() {
+  document.getElementById('videoFileName').textContent = buildVideoName();
+}
+onFieldChange();
+
+// Stats
+function updateStats() {
+  let ok=0, no=0, done=0;
+  for(let k in state){
+    if(k.includes('-note')) continue;
+    if(state[k]==='ok'){ok++;done++;}
+    if(state[k]==='no'){no++;done++;}
+  }
+  document.getElementById('stOk').textContent = ok;
+  document.getElementById('stNo').textContent = no;
+  document.getElementById('stPend').textContent = total - done;
+  document.getElementById('progText').textContent = done + ' / ' + total + ' перевірено';
+  document.getElementById('progPct').textContent = Math.round(done/total*100) + '%';
+  document.getElementById('progFill').style.width = Math.round(done/total*100) + '%';
+}
+
+// Build checklist
+function build() {
+  const cl = document.getElementById('cl');
+  cl.innerHTML = '';
+  SECTIONS.forEach((sec, si) => {
+    const div = document.createElement('div');
+    div.className = 'section';
+    let html = `<div class="sec-head"><span class="sec-num">${sec.num}</span>${sec.title}</div>`;
+    sec.items.forEach((item, ii) => {
+      const key = si+'-'+ii;
+      const v = state[key] || '';
+      html += `<div class="item-row">
+        <div class="item-main">
+          <div class="item-uk">${item.uk}</div>
+          <div class="item-de">${item.de}</div>
+        </div>
+        <div class="btn-group">
+          <button class="btn-ok${v==='ok'?' active':''}" onclick="setVal('${key}','ok')">✓ OK</button>
+          <button class="btn-no${v==='no'?' active':''}" onclick="setVal('${key}','no')">✗ Зауваження</button>
+        </div>
+      </div>`;
+      if(v === 'no') {
+        html += `<div class="note-row"><textarea rows="2" placeholder="Опишіть зауваження / Mangelbeschreibung..." oninput="state['${key}-note']=this.value">${state[key+'-note']||''}</textarea></div>`;
+      }
+    });
+    div.innerHTML = html;
+    cl.appendChild(div);
+  });
+}
+
+function setVal(key, val) {
+  state[key] = val;
+  build();
+  updateStats();
+}
+
+// Signature
+let sigDrawing = false, sigCtx = null, sigHasMark = false;
+function initSig() {
+  const canvas = document.getElementById('sigCanvas');
+  const wrap = document.getElementById('sigWrap');
+  canvas.width = wrap.offsetWidth || 700;
+  canvas.height = 90;
+  sigCtx = canvas.getContext('2d');
+  sigCtx.strokeStyle = '#1a1a1a';
+  sigCtx.lineWidth = 2.5;
+  sigCtx.lineCap = 'round';
+  sigCtx.lineJoin = 'round';
+  function pos(e) {
+    const r = canvas.getBoundingClientRect();
+    const src = e.touches ? e.touches[0] : e;
+    return {x:(src.clientX-r.left)*(canvas.width/r.width), y:(src.clientY-r.top)*(canvas.height/r.height)};
+  }
+  canvas.addEventListener('mousedown', e=>{sigDrawing=true;const p=pos(e);sigCtx.beginPath();sigCtx.moveTo(p.x,p.y);document.getElementById('sigHint').style.display='none';sigHasMark=true;});
+  canvas.addEventListener('mousemove', e=>{if(!sigDrawing)return;const p=pos(e);sigCtx.lineTo(p.x,p.y);sigCtx.stroke();});
+  canvas.addEventListener('mouseup', ()=>sigDrawing=false);
+  canvas.addEventListener('touchstart', e=>{e.preventDefault();sigDrawing=true;const p=pos(e);sigCtx.beginPath();sigCtx.moveTo(p.x,p.y);document.getElementById('sigHint').style.display='none';sigHasMark=true;},{passive:false});
+  canvas.addEventListener('touchmove', e=>{e.preventDefault();if(!sigDrawing)return;const p=pos(e);sigCtx.lineTo(p.x,p.y);sigCtx.stroke();},{passive:false});
+  canvas.addEventListener('touchend', ()=>sigDrawing=false);
+}
+function clearSig() {
+  if(sigCtx){sigCtx.clearRect(0,0,sigCtx.canvas.width,sigCtx.canvas.height);}
+  document.getElementById('sigHint').style.display='';
+  sigHasMark=false;
+}
+
+function onMediaConfirm() {
+  const checked = document.getElementById('mediaConfirm').checked;
+  const label = document.getElementById('mediaConfirmLabel');
+  label.style.borderColor = checked ? '#2d7a2d' : '#e0e0dc';
+  label.style.background = checked ? '#edf7ed' : '#fafaf8';
+}
+
+// Submit → Print
+function handleSubmit() {
+  const name = getWorkerName();
+  const site = getBaustelle();
+  const apt = document.getElementById('wohnungNr').value.trim();
+  if(!name||!site||!apt){alert('Будь ласка, заповніть: ім\'я, об\'єкт та номер квартири.\nBitte Name, Objekt und Wohnungsnummer ausfüllen.');return;}
+  if(!document.getElementById('mediaConfirm').checked){
+    alert('⚠️ Підтвердіть, що фото та відео зроблені.\nBitte bestätigen Sie, dass Fotos und Video aufgenommen wurden.');
+    document.getElementById('mediaConfirmLabel').style.borderColor='#b33030';
+    document.getElementById('mediaConfirmLabel').scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  let done=0;
+  for(let k in state){if(!k.includes('-note')&&(state[k]==='ok'||state[k]==='no'))done++;}
+  if(done < total){
+    const go = confirm('Не всі пункти перевірені ('+done+'/'+total+'). Все одно роздрукувати?\n\nNicht alle Punkte geprüft ('+done+'/'+total+'). Trotzdem drucken?');
+    if(!go) return;
+  }
+  buildPrintPage(name, site, apt);
+  window.print();
+}
+
+function buildPrintPage(name, site, apt) {
+  let ok=0,no=0;
+  for(let k in state){if(k.includes('-note'))continue;if(state[k]==='ok')ok++;if(state[k]==='no')no++;}
+  const done=ok+no;
+  const comment = document.getElementById('generalComment').value.trim();
+  const videoLink = document.getElementById('videoLink').value.trim();
+  const videoName = buildVideoName();
+  const sigData = sigHasMark ? document.getElementById('sigCanvas').toDataURL() : null;
+
+  let sectionsHtml = '';
+  SECTIONS.forEach((sec,si)=>{
+    let itemsHtml='';
+    sec.items.forEach((item,ii)=>{
+      const key=si+'-'+ii;
+      const v=state[key]||'';
+      const statusLabel = v==='ok'?'✓ OK':v==='no'?'✗ Зауваження':'—';
+      const statusClass = v==='ok'?'ok':v==='no'?'no':'empty';
+      itemsHtml+=`<div class="pr-item">
+        <div class="pr-item-text"><div class="pr-item-uk">${item.uk}</div><div class="pr-item-de">${item.de}</div></div>
+        <span class="pr-status ${statusClass}">${statusLabel}</span>
+      </div>`;
+      if(v==='no'&&state[key+'-note']){
+        itemsHtml+=`<div class="pr-note">↳ ${state[key+'-note']}</div>`;
+      }
+    });
+    sectionsHtml+=`<div class="pr-section"><div class="pr-sec-head">${sec.num} · ${sec.title}</div>${itemsHtml}</div>`;
+  });
+
+  document.getElementById('printPage').innerHTML = `
+    <div class="pr-header">
+      <div><div class="pr-logo">D&amp;A HOLDING GmbH</div><div class="pr-sub">Abnahmeprotokoll · Акт приймання</div></div>
+      <div class="pr-meta" style="color:#C49E4C">${dateStr}<br><span style="color:rgba(255,255,255,0.5);font-size:10px">Дата / Datum</span></div>
+    </div>
+    <div class="pr-info">
+      <div class="pr-info-item"><label>Співробітник / Mitarbeiter</label><span>${name}</span></div>
+      <div class="pr-info-item"><label>Об'єкт / Baustelle</label><span>${site}</span></div>
+      <div class="pr-info-item"><label>Квартира / Wohnungsnr.</label><span>${apt}</span></div>
+    </div>
+    <div class="pr-stats">
+      <div class="pr-stat"><div class="pr-stat-val">${total}</div><div class="pr-stat-lbl">всього</div></div>
+      <div class="pr-stat"><div class="pr-stat-val" style="color:#2d7a2d">${ok}</div><div class="pr-stat-lbl">✓ OK</div></div>
+      <div class="pr-stat"><div class="pr-stat-val" style="color:#b33030">${no}</div><div class="pr-stat-lbl">✗ зауважень</div></div>
+      <div class="pr-stat"><div class="pr-stat-val">${Math.round(done/total*100)}%</div><div class="pr-stat-lbl">перевірено</div></div>
+    </div>
+    ${sectionsHtml}
+    ${comment?`<div class="pr-comment"><strong>Загальні коментарі / Allgemeine Bemerkungen:</strong><br>${comment}</div>`:''}
+    <div class="pr-video">
+      <strong>📸 Фото та відео / Fotos & Video:</strong> ✓ Підтверджено — відправлені в чат приймання підряд з цим звітом.
+    </div>
+    <div class="pr-declaration">
+      Я, нижчепідписаний, підтверджую, що особисто оглянув(ла) об'єкт та засвідчую, що зазначені дані відповідають дійсності.<br>
+      Ich bestätige, dass ich das Objekt persönlich besichtigt habe und dass alle angegebenen Daten der Wahrheit entsprechen.
+    </div>
+    <div class="pr-sig-area">
+      ${sigData?`<img src="${sigData}" alt="підпис">`:' <div style="height:50px;border:1px solid #eee;border-radius:4px;width:200px"></div>'}
+      <div class="pr-sig-name">${name}</div>
+      <div class="pr-sig-date">${dateStr}</div>
+    </div>
+  `;
+}
+
+build();
+updateStats();
+populateSelects();
+setTimeout(initSig, 200);
+</script>
+</body>
+</html>
